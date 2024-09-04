@@ -2,6 +2,8 @@
 FROM apify/actor-node-puppeteer-chrome:20 AS builder
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 
+USER myuser
+
 WORKDIR /home/myuser
 
 # Copy root package*.json
