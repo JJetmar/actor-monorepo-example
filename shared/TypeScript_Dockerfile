@@ -5,7 +5,7 @@ ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 WORKDIR /home/myuser
 
 # Copy root package*.json
-COPY package*.json ./
+COPY --chown=myuser package*.json ./
 
 # Copy package.jsons of all used workspace members
 COPY "${ACTOR_PATH_IN_DOCKER_CONTEXT}/package*.json" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/"
@@ -16,9 +16,9 @@ COPY packages/typescript-utils/package*.json packages/typescript-utils/
 RUN npm install --include=dev --audit=false
 
 # Next, copy the rest of the source files.
-COPY "${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
-COPY packages packages/
-COPY tsconfig.build.json ./
+COPY --chown=myuser "${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
+COPY --chown=myuser packages packages/
+COPY --chown=myuser tsconfig.build.json ./
 
 # Build the TypeScript libraries
 RUN npm run -w "${ACTOR_PATH_IN_DOCKER_CONTEXT}" build
