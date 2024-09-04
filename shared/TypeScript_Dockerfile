@@ -29,6 +29,8 @@ RUN npm run -w "${ACTOR_PATH_IN_DOCKER_CONTEXT}" build
 FROM apify/actor-node-puppeteer-chrome:20
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 
+USER myuser
+
 # Copy root package*.json
 COPY package*.json ./
 
