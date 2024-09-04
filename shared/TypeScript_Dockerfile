@@ -8,9 +8,9 @@ WORKDIR /home/myuser
 COPY --chown=myuser package*.json ./
 
 # Copy package.jsons of all used workspace members
-COPY "${ACTOR_PATH_IN_DOCKER_CONTEXT}/package*.json" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/"
-COPY packages/javascript-utils/package*.json packages/javascript-utils/
-COPY packages/typescript-utils/package*.json packages/typescript-utils/
+COPY --chown=myuser "${ACTOR_PATH_IN_DOCKER_CONTEXT}/package*.json" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/"
+COPY --chown=myuser packages/javascript-utils/package*.json packages/javascript-utils/
+COPY --chown=myuser packages/typescript-utils/package*.json packages/typescript-utils/
 
 # Install all dependencies. Don't audit to speed up the installation.
 RUN npm install --include=dev --audit=false
