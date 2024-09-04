@@ -2,7 +2,7 @@
 FROM apify/actor-node-puppeteer-chrome:20 AS builder
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 
-WORKDIR /app
+WORKDIR /home/myuser
 
 # Copy root package*.json
 COPY package*.json ./
@@ -55,8 +55,8 @@ COPY "${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
 COPY packages packages/
 
 # Copy built JS files from the `builder` stage
-COPY --from=builder "/app/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
-COPY --from=builder /app/packages/typescript-utils/dist packages/typescript-utils/dist
+COPY --from=builder "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
+COPY --from=builder /home/myuser/packages/typescript-utils/dist packages/typescript-utils/dist
 
 # Run the actor's start command when running this image
 ENV ACTOR_PATH_IN_DOCKER_CONTEXT="${ACTOR_PATH_IN_DOCKER_CONTEXT}"
