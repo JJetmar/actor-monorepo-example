@@ -4,8 +4,19 @@ import { Actor } from 'apify';
 import { PuppeteerCrawler, Request } from 'crawlee';
 import { router } from './routes.js';
 
-// The init() call configures the Actor for its environment. It's recommended to start every Actor with an init().
+
+
+// @ts-ignore
+import { print as javascriptPrint } from '@packages/javascript-utils';
+import { print as typescriptPrint } from '@packages/typescript-utils';
+
 await Actor.init();
+
+javascriptPrint('Hello from a TypeScript actor!');
+
+const actorInput = await Actor.getInput<{ message: string }>();
+typescriptPrint(actorInput?.message || 'No message provided!');
+// The init() call configures the Actor for its environment. It's recommended to start every Actor with an init().
 
 interface Input {
     startUrls: Request[];
