@@ -7,5 +7,5 @@
     "dockerContextDir": "../../..",
     "input": "./input_schema.json",
     "readme": "../README.md",
-    "dockerfile": "../../../shared/Dockerfile"
+    "dockerfile": "../../../shared/Actor_Puppeteer.dockerfile"
 }

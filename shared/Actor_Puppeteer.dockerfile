@@ -24,20 +24,20 @@ COPY --chown=myuser tsconfig.build.json ./
 # Build the TypeScript libraries
 RUN npm run -w "${ACTOR_PATH_IN_DOCKER_CONTEXT}" build
 
-RUN ls "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
 # Create the final image, only with compiled code and production dependencies.
-
 FROM apify/actor-node-puppeteer-chrome:20
+
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 USER myuser
 
-
 # Copy root package*.json
 COPY --chown=myuser package*.json ./
+
 # Copy package.jsons of all workspace members
 COPY --chown=myuser "${ACTOR_PATH_IN_DOCKER_CONTEXT}/package*.json" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/"
 COPY --chown=myuser packages/javascript-utils/package*.json packages/javascript-utils/
 COPY --chown=myuser packages/typescript-utils/package*.json packages/typescript-utils/
+
 # Install NPM packages, skip optional and development dependencies to
 # keep the image small. Avoid logging too much and print the dependency
 # tree for debugging
@@ -51,9 +51,6 @@ RUN npm --quiet set progress=false \
    && npm --version \
    && rm -r ~/.npm
 
-# Copy the rest of the source files.
-# COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
-# COPY --from=builder --chown=myuser /home/myuser/packages packages/
 # Copy built JS files from the `builder` stage
 COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
 COPY --from=builder --chown=myuser /home/myuser/packages/typescript-utils/dist packages/typescript-utils/dist
