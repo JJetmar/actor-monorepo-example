@@ -1,16 +1,16 @@
 {
-	"name": "puppeteer-actor",
+	"name": "@actors/puppeteer-actor",
 	"version": "0.0.1",
 	"type": "module",
 	"description": "This is an example of an Apify actor.",
-	"engines": {
-		"node": ">=18.0.0"
-	},
+	"private": true,
 	"dependencies": {
 		"apify": "^3.1.10",
 		"crawlee": "^3.5.4",
-		"puppeteer": "*"
-	},
+		"puppeteer": "*",
+        "@packages/javascript-utils": "*",
+        "@packages/typescript-utils": "*"
+    },
 	"devDependencies": {
 		"@apify/eslint-config-ts": "^0.3.0",
 		"@apify/tsconfig": "^0.1.0",
@@ -21,10 +21,9 @@
 		"typescript": "^5.3.3"
 	},
 	"scripts": {
-		"start": "npm run start:dev",
-		"start:prod": "node dist/main.js",
-		"start:dev": "tsx src/main.ts",
-		"build": "tsc",
+        "start": "node --no-warnings --experimental-specifier-resolution=node --loader ../../module_loader.js src/index.ts",
+        "start:prod": "node dist/index.js",
+        "build": "tsc --build tsconfig.build.json",
 		"lint": "eslint ./src --ext .ts",
 		"lint:fix": "eslint ./src --ext .ts --fix",
 		"test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
