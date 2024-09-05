@@ -8,7 +8,7 @@
     },
     "references": [
         { "path": "../../packages/typescript-utils/tsconfig.build.json" },
-        { "path": "../../packages/javascript-ut/tsconfig.build.json" }
+        { "path": "../../packages/javascript-utils/tsconfig.build.json" }
     ],
     "include": [
         "src/**/*",
