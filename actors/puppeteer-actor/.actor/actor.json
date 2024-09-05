@@ -1,0 +1,11 @@
+{
+	"actorSpecification": 1,
+	"name": "puppeteer-actor",
+	"title": "Project Puppeteer Crawler Typescript",
+	"description": "Crawlee and Puppeteer project in typescript.",
+	"version": "0.0",
+    "dockerContextDir": "../../..",
+    "input": "./input_schema.json",
+    "readme": "../README.md",
+    "dockerfile": "../../../shared/TypeScript_Dockerfile"
+}
