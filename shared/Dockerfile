@@ -57,6 +57,7 @@ RUN npm --quiet set progress=false \
 # Copy built JS files from the `builder` stage
 COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
 COPY --from=builder --chown=myuser /home/myuser/packages/typescript-utils/dist packages/typescript-utils/dist
+COPY --from=builder --chown=myuser /home/myuser/packages/javascript-utils packages/javascript-utils/
 
 # Run the actor's start command when running this image
 ENV ACTOR_PATH_IN_DOCKER_CONTEXT="${ACTOR_PATH_IN_DOCKER_CONTEXT}"
