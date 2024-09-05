@@ -24,8 +24,6 @@ COPY --chown=myuser tsconfig.build.json ./
 # Build the TypeScript libraries
 RUN npm run -w "${ACTOR_PATH_IN_DOCKER_CONTEXT}" build
 
-
-
 # Create the final image, only with compiled code and production dependencies.
 FROM apify/actor-node-puppeteer-chrome:20
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
@@ -60,7 +58,7 @@ COPY --chown=myuser packages packages/
 
 # Copy built JS files from the `builder` stage
 COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
-COPY --from=builder --chown=myuser /home/myuser/packages/typescript-utils/dist packages/typescript-utils/dist
+COPY --from=builder --chown=myuser packages/typescript-utils/dist packages/typescript-utils/dist
 
 # Run the actor's start command when running this image
 ENV ACTOR_PATH_IN_DOCKER_CONTEXT="${ACTOR_PATH_IN_DOCKER_CONTEXT}"
