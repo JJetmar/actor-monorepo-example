@@ -1,6 +1,5 @@
 {
     "name": "@actors/typescript-actor",
-    "description": "Example TypeScript actor in a monorepo",
     "version": "1.0.0",
     "type": "module",
     "private": true,
