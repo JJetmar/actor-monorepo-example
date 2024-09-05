@@ -5,7 +5,7 @@
 	"private": true,
     "scripts": {
         "start": "node --no-warnings --experimental-specifier-resolution=node --loader ../../module_loader.js src/index.ts",
-        "start:prod": "node dist/index.js",
+        "start:prod": "node ./dist/main.js",
         "build": "tsc --build tsconfig.build.json",
         "lint": "eslint ./src --ext .ts",
         "lint:fix": "eslint ./src --ext .ts --fix",
