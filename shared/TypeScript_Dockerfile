@@ -3,8 +3,8 @@ FROM apify/actor-node-puppeteer-chrome:20 AS builder
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 
 USER myuser
+WORKDIR /home/myuser
 
-WORKDIR /app
 # Copy root package*.json
 COPY --chown=myuser package*.json ./
 
@@ -24,6 +24,8 @@ COPY --chown=myuser tsconfig.build.json ./
 # Build the TypeScript libraries
 RUN npm run -w "${ACTOR_PATH_IN_DOCKER_CONTEXT}" build
 
+
+
 # Create the final image, only with compiled code and production dependencies.
 FROM apify/actor-node-puppeteer-chrome:20
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
@@ -34,9 +36,9 @@ USER myuser
 COPY package*.json ./
 
 # Copy package.jsons of all workspace members
-COPY --chown=myuser "${ACTOR_PATH_IN_DOCKER_CONTEXT}/package*.json" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/"
-COPY --chown=myuser packages/javascript-utils/package*.json packages/javascript-utils/
-COPY --chown=myuser packages/typescript-utils/package*.json packages/typescript-utils/
+COPY "${ACTOR_PATH_IN_DOCKER_CONTEXT}/package*.json" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/"
+COPY packages/javascript-utils/package*.json packages/javascript-utils/
+COPY packages/typescript-utils/package*.json packages/typescript-utils/
 
 # Install NPM packages, skip optional and development dependencies to
 # keep the image small. Avoid logging too much and print the dependency
@@ -52,12 +54,12 @@ RUN npm --quiet set progress=false \
     && rm -r ~/.npm
 
 # Copy the rest of the source files.
-COPY --chown=myuser "${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
-COPY --chown=myuser packages packages/
+COPY "${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
+COPY packages packages/
 
 # Copy built JS files from the `builder` stage
-COPY --chown=myuser --from=builder "/app/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
-COPY --chown=myuser --from=builder /app/packages/typescript-utils/dist packages/typescript-utils/dist
+COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
+COPY --from=builder --chown=myuser /home/myuser/packages/typescript-utils/dist packages/typescript-utils/dist
 
 # Run the actor's start command when running this image
 ENV ACTOR_PATH_IN_DOCKER_CONTEXT="${ACTOR_PATH_IN_DOCKER_CONTEXT}"
