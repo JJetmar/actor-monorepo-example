@@ -3,7 +3,7 @@ FROM apify/actor-node-puppeteer-chrome:20 AS builder
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 
 USER myuser
-WORKDIR /tmp/app
+WORKDIR /home/myuser/
 
 # Copy root package*.json
 COPY --chown=myuser package*.json ./
@@ -30,6 +30,8 @@ RUN ls "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
 FROM apify/actor-node-puppeteer-chrome:20
 ARG ACTOR_PATH_IN_DOCKER_CONTEXT
 USER myuser
+
+
 # Copy root package*.json
 COPY --chown=myuser package*.json ./
 # Copy package.jsons of all workspace members
@@ -50,12 +52,12 @@ RUN npm --quiet set progress=false \
    && rm -r ~/.npm
 # COPY --from=builder --chown=myuser /app/dist ./dist
 # Copy the rest of the source files.
-COPY --from=builder --chown=myuser "/tmp/app/${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
-COPY --from=builder --chown=myuser /tmp/app/packages packages/
+COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}" "./${ACTOR_PATH_IN_DOCKER_CONTEXT}"
+COPY --from=builder --chown=myuser /home/myuser/packages packages/
 # Copy built JS files from the `builder` stage
-COPY --from=builder --chown=myuser "/tmp/app/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
-COPY --from=builder --chown=myuser /tmp/app/packages/typescript-utils/dist packages/typescript-utils/dist
-COPY --from=builder  --chown=myuser /tmp/app/ ./
+COPY --from=builder --chown=myuser "/home/myuser/${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist" "${ACTOR_PATH_IN_DOCKER_CONTEXT}/dist"
+COPY --from=builder --chown=myuser /home/myuser/packages/typescript-utils/dist packages/typescript-utils/dist
+# COPY --from=builder  --chown=myuser /home/myuser/ ./
 # Run the actor's start command when running this image
 ENV ACTOR_PATH_IN_DOCKER_CONTEXT="${ACTOR_PATH_IN_DOCKER_CONTEXT}"
 CMD ./start_xvfb_and_run_cmd.sh && npm run -w "${ACTOR_PATH_IN_DOCKER_CONTEXT}" start:prod --silent
